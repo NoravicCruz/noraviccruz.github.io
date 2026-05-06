@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Noravic Cruz</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Times New Roman', Times, serif;
+    color: #2a1f0e;
+    background: linear-gradient(135deg, #fffdf5 0%, #fdf6e3 40%, #faf0cc 70%, #f7e9b8 100%);
+    background-attachment: fixed;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: rgba(255,252,240,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(180,145,60,0.25);
+    z-index: 100;
+  }
+  .nav-inner {
+    max-width: 800px; margin: 0 auto; padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 58px;
+  }
+  .nav-logo {
+    font-weight: 700; font-size: 16px; letter-spacing: 0.03em;
+    color: #7a5c1e; text-decoration: none; font-style: italic;
+  }
+  .nav-links { display: flex; gap: 1.6rem; align-items: center; flex-wrap: wrap; }
+  .nav-links a {
+    text-decoration: none; font-size: 14px; color: #7a5c1e;
+    transition: color 0.2s; cursor: pointer; border: none; background: none; font-family: inherit;
+  }
+  .nav-links a:hover { color: #b8860b; }
+  .nav-divider { color: rgba(180,145,60,0.35); font-size: 13px; }
+
+  /* FADE-IN ON SCROLL */
+  .fade-section {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-section.visible { opacity: 1; transform: translateY(0); }
+
+  /* SECTIONS */
+  section { max-width: 800px; margin: 0 auto; padding: 5rem 2rem; }
+  section + section { border-top: 1px solid rgba(180,145,60,0.2); }
+
+  /* HERO */
+  #hero { padding-top: 9rem; }
+  .hero-tag {
+    font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #a07830; margin-bottom: 1rem; font-style: italic;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700;
+    line-height: 1.15; margin-bottom: 1rem; letter-spacing: -0.01em;
+    color: #3d2b0a;
+  }
+  .hero-subtitle { font-size: 1.05rem; color: #5a4020; max-width: 540px; margin-bottom: 2rem; }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; padding: 0.65rem 1.5rem; border-radius: 4px;
+    font-size: 14px; text-decoration: none; font-weight: 600;
+    transition: all 0.2s; font-family: 'Times New Roman', serif; cursor: pointer;
+  }
+  .btn-dark { background: #7a5c1e; color: #fffdf5; border: 1px solid #7a5c1e; }
+  .btn-dark:hover { background: #5c440f; }
+  .btn-outline { border: 1px solid #b8960c; color: #7a5c1e; background: transparent; }
+  .btn-outline:hover { background: rgba(180,145,60,0.1); }
+
+  /* SECTION HEADINGS */
+  h2 {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: #a07830; margin-bottom: 2rem;
+  }
+
+  /* ABOUT */
+  .about-bio { font-size: 1rem; color: #3d2b0a; margin-bottom: 1.25rem; max-width: 660px; }
+  .skills-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .skill-tag {
+    font-size: 13px; padding: 5px 13px; border-radius: 20px;
+    background: rgba(180,145,60,0.12); color: #5c3e0a;
+    border: 1px solid rgba(180,145,60,0.25); white-space: nowrap;
+    font-style: italic;
+  }
+
+  /* EXPERIENCE */
+  .timeline { display: flex; flex-direction: column; gap: 2.5rem; }
+  .job { display: grid; grid-template-columns: 165px 1fr; gap: 1.5rem; }
+  .job-date { font-size: 13px; color: #a07830; padding-top: 2px; line-height: 1.5; font-style: italic; }
+  .job-title { font-size: 15px; font-weight: 700; color: #3d2b0a; margin-bottom: 2px; }
+  .job-company { font-size: 13px; color: #8a6830; margin-bottom: 0.75rem; font-style: italic; }
+  .job-desc { font-size: 14px; color: #4a3318; line-height: 1.75; }
+  .job-desc li { list-style: none; padding-left: 1.1em; text-indent: -1.1em; margin-bottom: 4px; }
+  .job-desc li::before { content: "–"; margin-right: 0.5em; color: #c9a84c; }
+
+  /* EDUCATION */
+  .edu-list { display: flex; flex-direction: column; gap: 1.5rem; }
+  .edu-item { display: grid; grid-template-columns: 165px 1fr; gap: 1.5rem; }
+  .edu-date { font-size: 13px; color: #a07830; font-style: italic; }
+  .edu-degree { font-size: 15px; font-weight: 700; margin-bottom: 2px; color: #3d2b0a; }
+  .edu-school { font-size: 13px; color: #8a6830; font-style: italic; }
+
+  /* CONTACT */
+  .contact-hero { text-align: center; padding: 1rem 0 0.5rem; }
+  .contact-eyebrow { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #a07830; margin-bottom: 1rem; }
+  .contact-heading { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; color: #3d2b0a; margin-bottom: 1.25rem; }
+  .contact-sub { font-size: 1rem; color: #5a4020; max-width: 500px; margin: 0 auto 2.5rem; line-height: 1.75; }
+  .contact-btns { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
+  .contact-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 0.75rem 1.5rem; border-radius: 6px;
+    border: 1px solid rgba(180,145,60,0.4);
+    background: rgba(255,252,240,0.7);
+    color: #5c3e0a; font-size: 14px; font-family: 'Times New Roman', serif;
+    text-decoration: none; transition: all 0.2s; font-style: italic;
+  }
+  .contact-btn:hover { background: rgba(180,145,60,0.15); border-color: #b8860b; color: #3d2b0a; }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 2rem; font-size: 13px; color: #a07830;
+    border-top: 1px solid rgba(180,145,60,0.2); font-style: italic;
+    background: rgba(250,240,200,0.3);
+  }
+
+  @media (max-width: 540px) {
+    .job, .edu-item { grid-template-columns: 1fr; gap: 0.2rem; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#hero">Noravic Cruz</a>
+    <div class="nav-links">
+      <a onclick="scrollTo('about')">About</a>
+      <a onclick="scrollTo('experience')">Experience</a>
+      <a onclick="scrollTo('education')">Education</a>
+      <a onclick="scrollTo('contact')">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="fade-section">
+  <p class="hero-tag">Client Relationship Manager · Recruiter · Customer Specialist</p>
+  <h1>Noravic Cruz</h1>
+  <p class="hero-subtitle">Highly skilled in client account management, talent acquisition, and consultative selling — with a strong track record of building long-term client relationships and driving revenue growth.</p>
+  <div class="hero-actions">
+    <a href="mailto:mejianoravic@gmail.com" class="btn btn-dark">Get in touch</a>
+    <a onclick="scrollTo('experience')" class="btn btn-outline">View experience</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="fade-section">
+  <h2>About</h2>
+  <p class="about-bio">Results-driven professional with a solid foundation in BPO operations, technical sales, and recruitment. Backed by experience across diverse industries — from IT outsourcing and e-payments to procurement engineering — I bring an adaptable, client-focused approach to fast-paced environments.</p>
+  <p class="about-bio" style="margin-bottom:1.5rem;">Fluent in English · Native Tagalog · Basic Japanese</p>
+  <div class="skills-grid">
+    <span class="skill-tag">Client Management</span>
+    <span class="skill-tag">Talent Acquisition</span>
+    <span class="skill-tag">B2B Sales & Account Management</span>
+    <span class="skill-tag">Business Development</span>
+    <span class="skill-tag">IT Outsourcing</span>
+    <span class="skill-tag">Lead Generation</span>
+    <span class="skill-tag">Revenue Growth & Upselling</span>
+    <span class="skill-tag">Onboarding</span>
+    <span class="skill-tag">Digital Marketing</span>
+    <span class="skill-tag">Procurement</span>
+    <span class="skill-tag">Negotiation</span>
+    <span class="skill-tag">Salesforce</span>
+    <span class="skill-tag">Zendesk</span>
+    <span class="skill-tag">Monday.com</span>
+    <span class="skill-tag">Notion</span>
+    <span class="skill-tag">Slack</span>
+    <span class="skill-tag">Zoho</span>
+    <span class="skill-tag">Microsoft Office</span>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="fade-section">
+  <h2>Experience</h2>
+  <div class="timeline">
+    <div class="job">
+      <div class="job-date">Oct 2023 – Present</div>
+      <div>
+        <p class="job-title">Client Manager cum Recruiter</p>
+        <p class="job-company">Aurous Consultancy</p>
+        <ul class="job-desc">
+          <li>Manage end-to-end recruitment: job posting, sourcing, screening, interviewing, and offer management.</li>
+          <li>Drive B2B client engagement by recommending IT outsourcing and talent solutions aligned with client goals.</li>
+          <li>Manage a portfolio of corporate clients, supporting revenue expansion via upselling and cross-selling.</li>
+          <li>Conduct outbound business development via email, calls, and LinkedIn.</li>
+          <li>Partner with decision-makers to deliver consultative solutions and strengthen long-term relationships.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="job">
+      <div class="job-date">May 2021 – Jul 2023</div>
+      <div>
+        <p class="job-title">Account Specialist</p>
+        <p class="job-company">TDCX (MY) SDN BHD</p>
+        <ul class="job-desc">
+          <li>Provided excellent support to e-payment users via phone, chat, and email.</li>
+          <li>Investigated user issues and escalated bugs for quick resolution.</li>
+          <li>Assisted users with account setup, KYC verification, and API-based dashboard customization.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="job">
+      <div class="job-date">Dec 2018 – May 2021</div>
+      <div>
+        <p class="job-title">Customer Service Specialist</p>
+        <p class="job-company">ECE Consulting Group</p>
+        <ul class="job-desc">
+          <li>Handled customer inquiries and requests via real-time chat and email.</li>
+          <li>Developed deep expertise in Equities Trading, Margin, and Options Trading.</li>
+          <li>Resolved bank connection issues and overdraft concerns with empathy and efficiency.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="job">
+      <div class="job-date">Jun 2016 – Oct 2017</div>
+      <div>
+        <p class="job-title">Operations CSR II</p>
+        <p class="job-company">TELUS International Philippines</p>
+        <ul class="job-desc">
+          <li>Identified customer needs and recommended suitable computer products.</li>
+          <li>Provided consultation via chat, email, and call, consistently upselling products.</li>
+          <li>Met and exceeded client-mandated KPIs and monthly sales targets.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="job">
+      <div class="job-date">Feb 2011 – Present</div>
+      <div>
+        <p class="job-title">Sales Distributor (Independent Associate)</p>
+        <p class="job-company">UHS Essentials Philippines</p>
+        <ul class="job-desc">
+          <li>Built and managed a B2B/B2C client base through digital outreach and relationship marketing.</li>
+          <li>Promoted health and wellness products via social media and virtual presentations.</li>
+          <li>Recruited and mentored new team members in establishing their own distributorship.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="job">
+      <div class="job-date">Dec 2010 – Nov 2011</div>
+      <div>
+        <p class="job-title">Procurement Engineer I</p>
+        <p class="job-company">Emerson Electric Asia</p>
+        <ul class="job-desc">
+          <li>Evaluated suppliers and negotiated purchase agreements to ensure timely delivery.</li>
+          <li>Developed purchasing strategies based on portfolio analyses and supplier referencing.</li>
+          <li>Created Bill of Materials and maintained timely records and reporting.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="job">
+      <div class="job-date">Feb 2010 – Oct 2010</div>
+      <div>
+        <p class="job-title">Technical Support Engineer</p>
+        <p class="job-company">Tokyo Bosai Setsubi (TBS)</p>
+        <ul class="job-desc">
+          <li>Conducted site inspections and installation of CCTV, Fire Alarm Systems, and Access Control.</li>
+          <li>Configured and tested cameras and recording devices for optimal performance.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="job">
+      <div class="job-date">Jan 2009 – Feb 2010</div>
+      <div>
+        <p class="job-title">Technical Support Representative</p>
+        <p class="job-company">Teletech</p>
+        <ul class="job-desc">
+          <li>Helped customers troubleshoot internet/wireless connection issues via phone and email.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education" class="fade-section">
+  <h2>Education</h2>
+  <div class="edu-list">
+    <div class="edu-item">
+      <div class="edu-date">2003 – 2008</div>
+      <div>
+        <p class="edu-degree">BS Electronics and Communications Engineering</p>
+        <p class="edu-school">Polytechnic University of the Philippines</p>
+      </div>
+    </div>
+    <div class="edu-item">
+      <div class="edu-date">1999 – 2003</div>
+      <div>
+        <p class="edu-degree">Secondary Education / High School</p>
+        <p class="edu-school">Roosevelt College Marikina</p>
+      </div>
+    </div>
+    <div class="edu-item">
+      <div class="edu-date">1993 – 1999</div>
+      <div>
+        <p class="edu-degree">Primary Education / Elementary</p>
+        <p class="edu-school">Roosevelt College Marikina</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="fade-section">
+  <div class="contact-hero">
+    <p class="contact-eyebrow">Let's Connect</p>
+    <h3 class="contact-heading">Get in Touch</h3>
+    <p class="contact-sub">Open to new opportunities and collaborations. Feel free to reach out via email, WhatsApp, or LinkedIn — available with 30 days notice and open to relocation.</p>
+    <div class="contact-btns">
+      <a href="mailto:mejianoravic@gmail.com" class="contact-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+        mejianoravic@gmail.com
+      </a>
+      <a href="https://wa.me/60176568205" target="_blank" class="contact-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.09 5.18 2 2 0 0 1 5.07 3h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L9.91 10a16 16 0 0 0 6.09 6.09l.36-.36a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        +6017-656-8205
+      </a>
+      <a href="https://www.linkedin.com/in/noravic-cruz-1bb7895a/" target="_blank" class="contact-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="4"/><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 0 0-4 0"/></svg>
+        LinkedIn Profile
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  &copy; 2026 Noravic Cruz &nbsp;·&nbsp; All rights reserved
+</footer>
+
+<script>
+  function scrollTo(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - 70;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.fade-section').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
