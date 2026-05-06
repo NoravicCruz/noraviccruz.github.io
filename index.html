@@ -42,9 +42,9 @@
   .nav-divider { color: rgba(180,145,60,0.35); font-size: 13px; }
 
   /* FADE-IN ON SCROLL */
-  .fade-section {
+  .  fade-section {
     opacity: 0; transform: translateY(28px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
+    transition: opacity 2s ease, transform 2s ease;
   }
   .fade-section.visible { opacity: 1; transform: translateY(0); }
 
@@ -143,10 +143,10 @@
   <div class="nav-inner">
     <a class="nav-logo" href="#hero">Noravic Cruz</a>
     <div class="nav-links">
-      <a onclick="scrollTo('about')">About</a>
-      <a onclick="scrollTo('experience')">Experience</a>
-      <a onclick="scrollTo('education')">Education</a>
-      <a onclick="scrollTo('contact')">Contact</a>
+      <a data-target="about">About</a>
+      <a data-target="experience">Experience</a>
+      <a data-target="education">Education</a>
+      <a data-target="contact">Contact</a>
     </div>
   </div>
 </nav>
@@ -158,7 +158,7 @@
   <p class="hero-subtitle">Highly skilled in client account management, talent acquisition, and consultative selling — with a strong track record of building long-term client relationships and driving revenue growth.</p>
   <div class="hero-actions">
     <a href="mailto:mejianoravic@gmail.com" class="btn btn-dark">Get in touch</a>
-    <a onclick="scrollTo('experience')" class="btn btn-outline">View experience</a>
+    <a data-target="experience" class="btn btn-outline">View experience</a>
   </div>
 </section>
 
@@ -347,17 +347,38 @@
 </footer>
 
 <script>
-  function scrollTo(id) {
+  function smoothScrollTo(id) {
     const el = document.getElementById(id);
     if (!el) return;
-    const top = el.getBoundingClientRect().top + window.scrollY - 70;
-    window.scrollTo({ top, behavior: 'smooth' });
+    const targetY = el.getBoundingClientRect().top + window.scrollY - 70;
+    const startY = window.scrollY;
+    const dist = targetY - startY;
+    const duration = 1400;
+    let startTime = null;
+
+    function easeInOutCubic(t) {
+      return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+    }
+
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      window.scrollTo(0, startY + dist * easeInOutCubic(progress));
+      if (progress < 1) requestAnimationFrame(step);
+    }
+
+    requestAnimationFrame(step);
   }
+
+  document.querySelectorAll('.nav-links a[data-target]').forEach(link => {
+    link.addEventListener('click', () => smoothScrollTo(link.dataset.target));
+  });
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
-        e.target.classList.add('visible');
+        setTimeout(() => e.target.classList.add('visible'), 200);
         observer.unobserve(e.target);
       }
     });
